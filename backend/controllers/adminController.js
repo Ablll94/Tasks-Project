@@ -3,13 +3,21 @@ const Notification = require('../models/Notification');
 
 exports.createTask = async (req, res) => {
   try {
-    const { title, description, assignedTo, deadline } = req.body;
+    const { title, description, assignedTo, deadline, priority } = req.body;
 
-    const newTask = await Task.create({ title, description, assignedTo, deadline });
+    const newTask = await Task.create({
+      title,
+      description,
+      assignedTo,
+      deadline,
+      priority: priority || 'medium'
+    });
+
+    const prioLabel = { high: '🔴 عاجلة', medium: '🟡 مهمة', low: '🟢 عادية' }[newTask.priority] || '';
 
     await Notification.create({
       userId: assignedTo,
-      message: `تم إسناد مهمة جديدة لك: "${title}". الموعد النهائي: ${new Date(deadline).toLocaleString('ar-SA')}`,
+      message: `تم إسناد مهمة جديدة لك: "${title}" ${prioLabel}. الموعد النهائي: ${new Date(deadline).toLocaleString('ar-SA')}`,
       type: 'NEW_TASK',
       taskId: newTask._id
     });

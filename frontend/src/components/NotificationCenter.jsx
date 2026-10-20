@@ -64,6 +64,7 @@ const NotificationCenter = ({ userId }) => {
     <div style={{ position: 'relative' }}>
       <button 
         onClick={() => setShow(!show)}
+        className={`notif-bell ${data.length > 0 ? 'ring' : ''}`}
         style={{
           background: '#FFFFFF',
           border: '1px solid #C5A059',
@@ -101,7 +102,7 @@ const NotificationCenter = ({ userId }) => {
       </button>
 
       {show && (
-        <div style={{
+        <div className="notif-panel" style={{
           position: 'absolute',
           left: 0,
           top: '50px',
@@ -124,17 +125,20 @@ const NotificationCenter = ({ userId }) => {
           <div style={{ maxHeight: '380px', overflowY: 'auto', padding: '12px' }}>
             {data.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '30px 10px', color: '#64748B' }}>
-                <span style={{ fontSize: '24px', display: 'block', marginBottom: '8px' }}>📜</span>
-                <p style={{ margin: 0, fontSize: '13px' }}>لا توجد تنبيهات جديدة في الوقت الحالي</p>
+                <span style={{ fontSize: '36px', display: 'block', marginBottom: '10px', animation: 'floatY 3s ease-in-out infinite' }}>📭</span>
+                <p style={{ margin: 0, fontSize: '13px', fontWeight: '600' }}>لا توجد تنبيهات جديدة</p>
+                <p style={{ margin: '4px 0 0 0', fontSize: '11px', color: '#94A3B8' }}>سيصلك إشعار فور وصول تكليف جديد</p>
               </div>
             ) : (
-              data.map(item => {
+              data.map((item, idx) => {
                 const st = getStyle(item.type);
                 return (
                   <div 
-                    key={item._id} 
+                    key={item._id}
+                    className="notif-item"
                     onClick={() => markRead(item._id)}
                     style={{
+                      animationDelay: `${idx * 0.06}s`,
                       backgroundColor: st.bg,
                       borderRight: `4px solid ${st.border}`,
                       borderRadius: '8px',

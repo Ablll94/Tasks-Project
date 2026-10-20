@@ -10,6 +10,11 @@ const taskSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'completed', 'overdue'],
       default: 'pending'
+    },
+    priority: {
+      type: String,
+      enum: ['low', 'medium', 'high'],
+      default: 'medium'
     }
   },
   { timestamps: true }
